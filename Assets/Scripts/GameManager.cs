@@ -33,20 +33,24 @@ public class GameManager : MonoBehaviour
 
     public void FinishLineReached(CrowdManager playerCrowd)
     {
-        if (isGameOver) return;
         isGameOver = true;
+        // Calculate remaining army
+        int remaining = playerCrowd.units.Count;
 
-        int finalPlayerCount = playerCrowd.units.Count;
-        Debug.Log("Reached the base with " + finalPlayerCount + " units!");
-
-        if (finalPlayerCount >= enemyBaseArmySize)
+        if (remaining >= enemyBaseArmySize)
         {
-            GameWon();
+            if (UIManager.instance != null) UIManager.instance.ShowWinScreen();
         }
         else
         {
-            GameLost();
+            if (UIManager.instance != null) UIManager.instance.ShowLoseScreen();
         }
+    }
+
+    public void GameOver()
+    {
+        isGameOver = true;
+        if (UIManager.instance != null) UIManager.instance.ShowLoseScreen();
     }
 
     private void GameWon()

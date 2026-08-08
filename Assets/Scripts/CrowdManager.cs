@@ -46,8 +46,8 @@ public class CrowdManager : MonoBehaviour
             }
             else
             {
-                // Game Over logic goes here if crowd reaches 0!
-                Debug.Log("Game Over!");
+                // Trigger Game Over!
+                if (GameManager.instance != null) GameManager.instance.GameOver();
                 break;
             }
         }

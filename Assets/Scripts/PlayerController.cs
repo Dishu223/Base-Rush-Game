@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // Don't move if the game is over!
+        if (GameManager.instance != null && GameManager.instance.isGameOver) return;
+
         // For hypercasual, wait for the first tap to start running
         if (!isMoving && Input.GetMouseButtonDown(0))
         {

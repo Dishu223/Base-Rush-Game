@@ -92,7 +92,8 @@ public class Gate : MonoBehaviour
                 floatString = "+" + amountToChange;
                 break;
             case GateType.Subtract:
-                amountToChange = value;
+                // Don't let it remove more units than we actually have!
+                amountToChange = Mathf.Min(value, currentCount); 
                 crowd.RemoveUnits(amountToChange);
                 floatString = "-" + amountToChange;
                 floatColor = Color.red;
