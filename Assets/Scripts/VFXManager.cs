@@ -1,0 +1,42 @@
+using UnityEngine;
+
+public class VFXManager : MonoBehaviour
+{
+    public static VFXManager instance;
+
+    [Header("Prefabs")]
+    public GameObject hitParticlePrefab;
+    public GameObject floatingTextPrefab;
+
+    void Awake()
+    {
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+    }
+
+    public void SpawnHitParticle(Vector3 position)
+    {
+        if (hitParticlePrefab != null)
+        {
+            GameObject particle = Instantiate(hitParticlePrefab, position, Quaternion.identity);
+            // Particle system should be set to "Stop Action -> Destroy" in Unity editor,
+            // or we can force destroy it here just in case:
+            Destroy(particle, 1.5f);
+        }
+    }
+
+    public void SpawnFloatingText(Vector3 position, string text, Color color, float scale = 1f)
+    {
+        if (floatingTextPrefab != null)
+        {
+            // Spawn it slightly above the hit location
+            GameObject floatText = Instantiate(floatingTextPrefab, position + Vector3.up, Quaternion.identity);
+            
+            FloatingText ftScript = floatText.GetComponent<FloatingText>();
+            if (ftScript != null)
+            {
+                ftScript.Setup(text, color, scale);
+            }
+        }
+    }
+}
