@@ -49,10 +49,10 @@ public class CrowdManager : MonoBehaviour
             // Rise up between 3 and 7 units high, slightly randomized
             targetPositions[i] = units[i].position + new Vector3(0, Random.Range(3f, 7f), 0);
             
-            // Spawn some cool lightning particles while they rise!
+            // Spawn some cool lightning particles while they rise! (Raised slightly so it's not hidden)
             if (VFXManager.instance != null)
             {
-                VFXManager.instance.SpawnLightning(targetPositions[i]);
+                VFXManager.instance.SpawnLightning(targetPositions[i] + Vector3.up);
             }
         }
 

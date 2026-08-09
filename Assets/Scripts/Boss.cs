@@ -27,8 +27,13 @@ public class Boss : MonoBehaviour
         
         if (VFXManager.instance != null) 
         {
-            VFXManager.instance.SpawnFireworks(transform.position);
+            // Spawn fireworks closer to the camera so they aren't hidden inside the giant boss!
+            VFXManager.instance.SpawnFireworks(transform.position - new Vector3(0, 0, 2.5f));
         }
+        
+        // Small screen shake on every hit
+        CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
+        if (cam != null) cam.TriggerShake(0.1f, 0.3f);
 
         if (health <= 0)
         {
@@ -40,12 +45,16 @@ public class Boss : MonoBehaviour
     {
         if (VFXManager.instance != null) 
         {
-            // Spawn a massive fireworks explosion!
+            // Spawn a massive fireworks explosion around the edges!
             VFXManager.instance.SpawnFireworks(transform.position);
-            VFXManager.instance.SpawnFireworks(transform.position + Vector3.up * 2);
-            VFXManager.instance.SpawnFireworks(transform.position + Vector3.right * 2);
-            VFXManager.instance.SpawnFireworks(transform.position + Vector3.left * 2);
+            VFXManager.instance.SpawnFireworks(transform.position + new Vector3(0, 2f, -2f));
+            VFXManager.instance.SpawnFireworks(transform.position + new Vector3(2f, 0, -2f));
+            VFXManager.instance.SpawnFireworks(transform.position + new Vector3(-2f, 0, -2f));
         }
+        
+        // Massive screen shake when the boss dies!
+        CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
+        if (cam != null) cam.TriggerShake(0.8f, 1.0f);
         
         if (GameManager.instance != null)
         {
