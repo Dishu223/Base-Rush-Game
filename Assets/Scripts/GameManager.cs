@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            SceneManager.LoadScene("MainMenu");
         }
     }
 
@@ -105,7 +105,8 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         isGameOver = true;
-        if (UIManager.instance != null) UIManager.instance.ShowLoseScreen();
+        // Instantly return to Main Menu as requested!
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void GameWon()
