@@ -145,13 +145,14 @@ public class CrowdManager : MonoBehaviour
     {
         while (bossTarget != null)
         {
-            // Derivative of Sine wave gives us a velocity to gently bob up and down
-            float bobVelocity = Mathf.Cos(Time.time * 3f) * 0.8f; 
-            
             for (int i = 0; i < units.Count; i++)
             {
                 if (units[i] != null)
                 {
+                    // Use the unit's unique ID to create a random time offset so they all hover independently!
+                    float uniqueOffset = units[i].GetInstanceID() * 0.1f;
+                    float bobVelocity = Mathf.Cos((Time.time + uniqueOffset) * 3f) * 0.8f; 
+                    
                     units[i].position += new Vector3(0, bobVelocity * Time.deltaTime, 0);
                     
                     Renderer r = units[i].GetComponentInChildren<Renderer>();
