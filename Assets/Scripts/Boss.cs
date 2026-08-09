@@ -29,6 +29,9 @@ public class Boss : MonoBehaviour
         {
             // Spawn fireworks closer to the camera so they aren't hidden inside the giant boss!
             VFXManager.instance.SpawnFireworks(transform.position - new Vector3(0, 0, 2.5f));
+            
+            // Spawn Lightning coming OUT of the boss when it takes damage!
+            VFXManager.instance.SpawnLightning(transform.position);
         }
         
         // Small screen shake on every hit

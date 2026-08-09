@@ -153,5 +153,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b520a00b7eb06934092f84bdd6f692ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Boss
-  health: 40
+  health: 150
   healthText: {fileID: 0}

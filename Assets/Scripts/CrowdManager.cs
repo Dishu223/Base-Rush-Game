@@ -48,12 +48,6 @@ public class CrowdManager : MonoBehaviour
             startPositions[i] = units[i].position;
             // Rise up between 3 and 7 units high, slightly randomized
             targetPositions[i] = units[i].position + new Vector3(0, Random.Range(3f, 7f), 0);
-            
-            // Spawn some cool lightning particles while they rise! (Raised slightly so it's not hidden)
-            if (VFXManager.instance != null)
-            {
-                VFXManager.instance.SpawnLightning(targetPositions[i] + Vector3.up);
-            }
         }
 
         while (elapsed < riseDuration)
@@ -74,7 +68,7 @@ public class CrowdManager : MonoBehaviour
         // Suspend in the air for a dramatic pause (2 seconds!)
         yield return new WaitForSeconds(2.0f);
 
-        // Phase 2: Shoot at the boss 1 by 1 with exponential speed!
+        // Phase 2: Shoot at the boss 1 by 1 with multiplied speed!
         Boss bossScript = bossTarget.GetComponent<Boss>();
         float waitTime = 0.2f; // Starts slow!
         
@@ -97,8 +91,8 @@ public class CrowdManager : MonoBehaviour
             // Wait before launching the next one
             yield return new WaitForSeconds(waitTime);
 
-            // Exponentially speed up the attack! Clamped at 0.015f so it doesn't freeze.
-            waitTime = Mathf.Max(0.015f, waitTime * 0.85f);
+            // Multiply speed gently so it doesn't get ridiculously fast too quickly. Clamped at 0.05f.
+            waitTime = Mathf.Max(0.05f, waitTime * 0.95f);
         }
 
         // If boss is dead and we have units left, we won! Let's update UI just in case.

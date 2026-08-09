@@ -43,8 +43,11 @@ public class CameraFollow : MonoBehaviour
             Boss boss = FindObjectOfType<Boss>();
             if (boss != null)
             {
-                // Move camera up and to the side for a wide cinematic shot, slower transition!
-                Vector3 desiredPosition = target.position + new Vector3(12, 10, -8);
+                // Create a slow, dynamic panning motion using Time.time
+                float panX = Mathf.Sin(Time.time * 0.5f) * 5f; // Drifts left and right 
+                Vector3 cinematicOffset = new Vector3(12 + panX, 10, -8);
+                
+                Vector3 desiredPosition = target.position + cinematicOffset;
                 finalPosition = Vector3.Lerp(transform.position, desiredPosition, 0.8f * Time.deltaTime);
                 
                 // Smoothly look directly at the Boss
