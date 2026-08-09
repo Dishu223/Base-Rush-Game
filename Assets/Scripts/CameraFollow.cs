@@ -68,8 +68,8 @@ public class CameraFollow : MonoBehaviour
         else
         {
             // Add subtle camera sway to make the run feel more dynamic!
-            float swayX = Mathf.Sin(Time.time * 2f) * 0.3f;
-            float swayY = Mathf.Cos(Time.time * 1.5f) * 0.2f;
+            float swayX = Mathf.Sin(Time.time * 1f) * 0.05f;
+            float swayY = Mathf.Cos(Time.time * 0.8f) * 0.05f;
 
             // We only want the camera to follow the Z axis (forward), not the X axis (left/right swiping)
             Vector3 normalPosition = new Vector3(transform.position.x, target.position.y + offset.y, target.position.z + offset.z);
