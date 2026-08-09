@@ -7,6 +7,8 @@ public class UIManager : MonoBehaviour
 
     [Header("UI Elements")]
     public TextMeshProUGUI unitCountText;
+    public TextMeshProUGUI bossHealthText;
+    
     public GameObject winPanel;
     public GameObject losePanel;
 
@@ -21,6 +23,14 @@ public class UIManager : MonoBehaviour
         // Hide panels at the start
         if (winPanel != null) winPanel.SetActive(false);
         if (losePanel != null) losePanel.SetActive(false);
+    }
+
+    public void UpdateBossHealth(int health)
+    {
+        if (bossHealthText != null)
+        {
+            bossHealthText.text = "Boss Health: " + health;
+        }
     }
 
     public void UpdateUnitCount(int count)

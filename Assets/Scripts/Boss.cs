@@ -18,6 +18,12 @@ public class Boss : MonoBehaviour
         {
             healthText.text = health.ToString();
         }
+        
+        // Also update the 2D Screen UI so it's always visible!
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.UpdateBossHealth(health);
+        }
     }
 
     public void TakeDamage(int damage)
