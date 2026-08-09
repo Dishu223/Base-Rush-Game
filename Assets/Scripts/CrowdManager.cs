@@ -147,7 +147,7 @@ public class CrowdManager : MonoBehaviour
 
     private System.Collections.IEnumerator ApplyHoverAndFade()
     {
-        while (bossTarget != null)
+        while (true) // Keep hovering even after the boss dies!
         {
             for (int i = 0; i < units.Count; i++)
             {

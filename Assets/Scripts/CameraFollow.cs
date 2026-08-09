@@ -21,9 +21,12 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
+    private float bossPhaseElapsed = 0f;
+
     public void StartCinematicBossView()
     {
         inBossPhase = true;
+        bossPhaseElapsed = 0f;
     }
 
     public void TriggerShake(float duration, float magnitude)
@@ -40,12 +43,18 @@ public class CameraFollow : MonoBehaviour
 
         if (inBossPhase)
         {
+            bossPhaseElapsed += Time.deltaTime;
             Boss boss = FindObjectOfType<Boss>();
+            
             if (boss != null)
             {
-                // Create a slow, dynamic panning motion using Time.time
-                float panX = Mathf.Sin(Time.time * 0.5f) * 5f; // Drifts left and right 
-                Vector3 cinematicOffset = new Vector3(12 + panX, 10, -8);
+                // Pan slowly to the right only!
+                float panX = bossPhaseElapsed * 1.5f; 
+                
+                // Add a very subtle up/down cinematic sway
+                float swayY = Mathf.Sin(bossPhaseElapsed * 0.8f) * 1f;
+
+                Vector3 cinematicOffset = new Vector3(8 + panX, 10 + swayY, -8);
                 
                 Vector3 desiredPosition = target.position + cinematicOffset;
                 finalPosition = Vector3.Lerp(transform.position, desiredPosition, 0.8f * Time.deltaTime);
@@ -58,9 +67,14 @@ public class CameraFollow : MonoBehaviour
         }
         else
         {
+            // Add subtle camera sway to make the run feel more dynamic!
+            float swayX = Mathf.Sin(Time.time * 2f) * 0.3f;
+            float swayY = Mathf.Cos(Time.time * 1.5f) * 0.2f;
+
             // We only want the camera to follow the Z axis (forward), not the X axis (left/right swiping)
-            // This keeps the runway centered on the screen!
             Vector3 normalPosition = new Vector3(transform.position.x, target.position.y + offset.y, target.position.z + offset.z);
+            normalPosition += new Vector3(swayX, swayY, 0);
+
             finalPosition = Vector3.Lerp(transform.position, normalPosition, smoothSpeed * Time.deltaTime);
         }
 
