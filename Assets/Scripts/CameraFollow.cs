@@ -3,6 +3,9 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public Transform target;
+    public Vector3 offset;
+    public float smoothSpeed = 10f;
+    
     private bool inBossPhase = false;
     
     // Screen Shake variables
