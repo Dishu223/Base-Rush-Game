@@ -254,13 +254,14 @@ public class CrowdManager : MonoBehaviour
                 units.RemoveAt(units.Count - 1);
                 Destroy(unitToRemove.gameObject);
             }
-            else
-            {
-                // Trigger Game Over!
-                if (GameManager.instance != null) GameManager.instance.GameOver();
-                break;
-            }
         }
+        
+        // Trigger Game Over immediately if army drops to 0!
+        if (units.Count == 0 && GameManager.instance != null && !GameManager.instance.isGameOver)
+        {
+            GameManager.instance.GameOver();
+        }
+        
         FormatCrowd();
     }
 
