@@ -221,7 +221,7 @@ public class CrowdManager : MonoBehaviour
         }
     }
 
-    public int maxUnits = 150;
+    public int maxUnits = 1000;
 
     public void AddUnit()
     {
