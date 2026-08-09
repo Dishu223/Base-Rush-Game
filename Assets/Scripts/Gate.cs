@@ -66,10 +66,32 @@ public class Gate : MonoBehaviour
                 ApplyGateEffect(crowd);
                 hasBeenUsed = true;
                 
-                // Optional: Destroy or deactivate the gate after use
-                // gameObject.SetActive(false);
+                // Do a fun squishy bounce animation!
+                StartCoroutine(BounceAnimation());
             }
         }
+    }
+
+    private System.Collections.IEnumerator BounceAnimation()
+    {
+        float elapsed = 0f;
+        float duration = 0.3f;
+        Vector3 originalScale = transform.localScale;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            
+            // Squish on Y, expand on X/Z using a Sine curve
+            float scaleY = Mathf.Lerp(1f, 0.4f, Mathf.Sin(t * Mathf.PI));
+            float scaleXZ = Mathf.Lerp(1f, 1.3f, Mathf.Sin(t * Mathf.PI));
+            
+            transform.localScale = new Vector3(originalScale.x * scaleXZ, originalScale.y * scaleY, originalScale.z * scaleXZ);
+            yield return null;
+        }
+        
+        transform.localScale = originalScale;
     }
 
     private void ApplyGateEffect(CrowdManager crowd)

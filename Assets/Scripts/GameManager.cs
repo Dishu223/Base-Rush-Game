@@ -10,6 +10,11 @@ public class GameManager : MonoBehaviour
     public bool isGameOver = false;
     public bool isBossPhase = false;
 
+    [Header("Progression")]
+    public int currentLevel = 1;
+    public int startingArmyUpgrade = 0;
+    public int incomeMultiplierUpgrade = 1;
+
     [Header("Economy")]
     public int coins = 0;
 
@@ -19,14 +24,47 @@ public class GameManager : MonoBehaviour
         if (instance == null) instance = this;
         else Destroy(gameObject);
 
-        // Load saved coins
+        // Load saved data
         coins = PlayerPrefs.GetInt("TotalCoins", 0);
+        currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
+        startingArmyUpgrade = PlayerPrefs.GetInt("StartingArmyUpgrade", 0);
+        incomeMultiplierUpgrade = PlayerPrefs.GetInt("IncomeMultiplierUpgrade", 1);
+        
+        // Ensure time is normal when scene reloads!
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     public void AddCoins(int amount)
     {
-        coins += amount;
+        coins += (amount * incomeMultiplierUpgrade);
         PlayerPrefs.SetInt("TotalCoins", coins); // Save automatically
+    }
+
+    public void NextLevel()
+    {
+        currentLevel++;
+        PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public float GetLevelSpeedModifier()
+    {
+        // Increase speed by 5% per level, clamped at 2.5x max speed
+        return Mathf.Clamp(1f + ((currentLevel - 1) * 0.05f), 1f, 2.5f);
     }
 
     public void StartBossPhase()

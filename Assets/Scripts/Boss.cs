@@ -33,6 +33,9 @@ public class Boss : MonoBehaviour
             // Spawn Lightning randomly on the ENTIRE FRONT face of the boss (Since scale is 4, radius is 2)
             Vector3 lightningPos = transform.position + new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), -2.5f);
             VFXManager.instance.SpawnLightning(lightningPos);
+            
+            // Explode tiny white damage text out of the boss!
+            VFXManager.instance.SpawnFloatingText(lightningPos, "-" + damage.ToString(), Color.white, 0.6f);
         }
         
         // Subtle screen shake on every hit so it doesn't hurt the eyes!

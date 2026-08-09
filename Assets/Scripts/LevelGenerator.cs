@@ -24,12 +24,24 @@ public class LevelGenerator : MonoBehaviour
     void GenerateLevel()
     {
         float currentZ = 0f;
+        int level = 1;
+        if (GameManager.instance != null) level = GameManager.instance.currentLevel;
 
-        for (int i = 0; i < segmentsToSpawn; i++)
+        // Increase level length! +1 segment every 2 levels
+        int totalSegments = segmentsToSpawn + (level / 2);
+        
+        // Pick a random floor color for this level to make it feel fresh!
+        Color floorColor = Random.ColorHSV(0f, 1f, 0.5f, 0.8f, 0.2f, 0.5f);
+
+        for (int i = 0; i < totalSegments; i++)
         {
             // 1. Spawn Ground
             Vector3 segmentPos = new Vector3(0, 0, currentZ);
-            Instantiate(groundSegmentPrefab, segmentPos, Quaternion.identity, transform);
+            GameObject ground = Instantiate(groundSegmentPrefab, segmentPos, Quaternion.identity, transform);
+            
+            // Apply level color
+            Renderer r = ground.GetComponent<Renderer>();
+            if (r != null) r.material.color = floorColor;
 
             // 2. Spawn obstacles. Start at Z=15 on the first segment so player has a small buffer.
             float startSpawnZ = (i == 0) ? 15f : currentZ;
@@ -42,10 +54,23 @@ public class LevelGenerator : MonoBehaviour
         Vector3 finishPos = new Vector3(0, 1f, currentZ);
         Instantiate(finishLinePrefab, finishPos, Quaternion.identity, transform);
 
-        // 4. Spawn the Boss behind the finish line!
+        // 4. Spawn the Boss behind the finish line and upgrade it based on Level!
         if (bossPrefab != null)
         {
-            Instantiate(bossPrefab, new Vector3(0, 1f, currentZ + 20f), Quaternion.identity, transform);
+            GameObject bossObj = Instantiate(bossPrefab, new Vector3(0, 1f, currentZ + 20f), Quaternion.identity, transform);
+            Boss bossScript = bossObj.GetComponent<Boss>();
+            if (bossScript != null)
+            {
+                bossScript.health += (level - 1) * 20; // +20 Health per level!
+                
+                // Scale up boss slightly per level (max 2x)
+                float scaleMod = Mathf.Min(1f + ((level - 1) * 0.1f), 2f);
+                bossObj.transform.localScale *= scaleMod;
+                
+                // Random Boss color per level!
+                Renderer bossRenderer = bossObj.GetComponent<Renderer>();
+                if (bossRenderer != null) bossRenderer.material.color = Random.ColorHSV(0f, 1f, 0.8f, 1f, 0.5f, 1f);
+            }
         }
     }
 

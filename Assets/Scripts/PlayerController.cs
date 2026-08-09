@@ -39,8 +39,11 @@ public class PlayerController : MonoBehaviour
 
     private void MoveForward()
     {
+        float speedMod = 1f;
+        if (GameManager.instance != null) speedMod = GameManager.instance.GetLevelSpeedModifier();
+        
         // Move the player forward automatically
-        transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
+        transform.Translate(Vector3.forward * forwardSpeed * speedMod * Time.deltaTime);
     }
 
     private void HandleHorizontalMovement()

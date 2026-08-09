@@ -14,9 +14,9 @@ public class CrowdManager : MonoBehaviour
 
     void Start()
     {
-        // Load the upgraded starting army size from the shop!
-        // Defaults to 4 if we haven't bought anything yet.
-        int startAmount = PlayerPrefs.GetInt("StartingArmySize", 4);
+        int startAmount = 4;
+        if (GameManager.instance != null) startAmount += GameManager.instance.startingArmyUpgrade;
+        
         AddUnits(startAmount);
     }
 
@@ -212,6 +212,13 @@ public class CrowdManager : MonoBehaviour
                 if (GameManager.instance != null) GameManager.instance.GameOver();
             }
         }
+    }
+
+    public void AddUnit()
+    {
+        GameObject newUnit = Instantiate(unitPrefab, transform.position, Quaternion.identity, transform);
+        units.Add(newUnit.transform);
+        FormatCrowd();
     }
 
     public void AddUnits(int amount)
