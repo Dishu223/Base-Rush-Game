@@ -30,13 +30,14 @@ public class Boss : MonoBehaviour
             // Spawn fireworks closer to the camera so they aren't hidden inside the giant boss!
             VFXManager.instance.SpawnFireworks(transform.position - new Vector3(0, 0, 2.5f));
             
-            // Spawn Lightning coming OUT of the boss when it takes damage!
-            VFXManager.instance.SpawnLightning(transform.position);
+            // Spawn Lightning randomly on the FRONT face of the boss so it is clearly visible!
+            Vector3 lightningPos = transform.position + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), -2.5f);
+            VFXManager.instance.SpawnLightning(lightningPos);
         }
         
-        // Small screen shake on every hit
+        // Subtle screen shake on every hit so it doesn't hurt the eyes!
         CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
-        if (cam != null) cam.TriggerShake(0.1f, 0.3f);
+        if (cam != null) cam.TriggerShake(0.05f, 0.08f);
 
         if (health <= 0)
         {
@@ -55,9 +56,9 @@ public class Boss : MonoBehaviour
             VFXManager.instance.SpawnFireworks(transform.position + new Vector3(-2f, 0, -2f));
         }
         
-        // Massive screen shake when the boss dies!
+        // Moderate screen shake when the boss dies!
         CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
-        if (cam != null) cam.TriggerShake(0.8f, 1.0f);
+        if (cam != null) cam.TriggerShake(0.4f, 0.4f);
         
         if (GameManager.instance != null)
         {

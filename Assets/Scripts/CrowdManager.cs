@@ -104,23 +104,39 @@ public class CrowdManager : MonoBehaviour
 
     private System.Collections.IEnumerator ShootUnitAtBoss(Transform unit, Boss bossScript)
     {
-        while (unit != null && bossTarget != null)
-        {
-            // Move incredibly fast towards the boss
-            unit.position = Vector3.MoveTowards(unit.position, bossTarget.position, 40f * Time.deltaTime);
-            
-            if (Vector3.Distance(unit.position, bossTarget.position) < 1.5f)
-            {
-                if (bossScript != null) bossScript.TakeDamage(1);
-                Destroy(unit.gameObject);
+        Vector3 startPos = unit.position;
+        
+        // Generate a random control point to make the unit swerve in an arc!
+        float randomSide = Random.Range(-10f, 10f);
+        float randomHeight = Random.Range(-2f, 10f);
+        Vector3 midPos = Vector3.Lerp(startPos, bossTarget.position, 0.5f) + new Vector3(randomSide, randomHeight, 0);
+        
+        float duration = 0.4f; // Flight time (0.4 seconds to reach boss)
+        float elapsed = 0f;
 
-                if (units.Count == 0 && bossScript != null && bossScript.health > 0)
-                {
-                    if (GameManager.instance != null) GameManager.instance.GameOver();
-                }
-                yield break;
-            }
+        while (unit != null && bossTarget != null && elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            
+            // Quadratic Bezier Curve calculation for smooth arcing
+            Vector3 m1 = Vector3.Lerp(startPos, midPos, t);
+            Vector3 m2 = Vector3.Lerp(midPos, bossTarget.position, t);
+            unit.position = Vector3.Lerp(m1, m2, t);
+            
             yield return null;
+        }
+
+        // The unit has arrived!
+        if (unit != null && bossTarget != null)
+        {
+            if (bossScript != null) bossScript.TakeDamage(1);
+            Destroy(unit.gameObject);
+
+            if (units.Count == 0 && bossScript != null && bossScript.health > 0)
+            {
+                if (GameManager.instance != null) GameManager.instance.GameOver();
+            }
         }
     }
 
