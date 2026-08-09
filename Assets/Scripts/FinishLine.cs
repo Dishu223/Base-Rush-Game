@@ -17,6 +17,10 @@ public class FinishLine : MonoBehaviour
                 GameManager.instance.StartBossPhase();
             }
 
+            // Trigger cinematic camera
+            CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
+            if (cam != null) cam.StartCinematicBossView();
+
             // Find the boss and tell the crowd to attack it!
             CrowdManager crowd = other.GetComponent<CrowdManager>();
             Boss boss = FindObjectOfType<Boss>();

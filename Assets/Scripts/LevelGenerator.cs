@@ -99,9 +99,9 @@ public class LevelGenerator : MonoBehaviour
         
         for (int i = 0; i < numCoins; i++)
         {
-            // Raised to Y=0.5 so coins aren't underground
+            // Raised to Y=1f so coins aren't underground
             // We use coinPrefab.transform.rotation so it keeps its 90-degree X rotation!
-            Instantiate(coinPrefab, new Vector3(randomX, 0.5f, zPos + (i * 2f)), coinPrefab.transform.rotation, transform);
+            Instantiate(coinPrefab, new Vector3(randomX, 1f, zPos + (i * 2f)), coinPrefab.transform.rotation, transform);
         }
     }
 

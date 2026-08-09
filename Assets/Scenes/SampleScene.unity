@@ -887,6 +887,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   enemyBaseArmySize: 25
   isGameOver: 0
+  isBossPhase: 0
   coins: 0
 --- !u!4 &812051542
 Transform:
@@ -932,6 +933,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelGenerator
   groundSegmentPrefab: {fileID: 5270975336012093126, guid: 64b2c2ef89dccf44fbbcf1053942ee0b, type: 3}
   finishLinePrefab: {fileID: 5757628606007127315, guid: ae8813a6cdb0c6d459bb7df5e0a34a0f, type: 3}
+  bossPrefab: {fileID: 3208984384025211943, guid: c4de9a9f80a33264bab3d67b15f4ee2f, type: 3}
   gatePrefabs:
   - {fileID: 5039984923644360049, guid: a269b3bc7eddfb74fba1e5512a846b26, type: 3}
   - {fileID: 1751906924283939198, guid: b724146f91c31d349870579309454f5a, type: 3}
@@ -1211,7 +1213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e3f97c23ebb058488a361c1e6dc47ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  forwardSpeed: 10
+  forwardSpeed: 5
   swipeSpeed: 40
   boundaryX: 4.5
 --- !u!136 &1396065099

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1841948721747984643
+--- !u!1 &3208984384025211943
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,49 +8,49 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3796721643916488581}
-  - component: {fileID: 5084575182733460984}
-  - component: {fileID: 3587361991470534338}
-  - component: {fileID: 4094206035414532053}
-  - component: {fileID: 967881663835432079}
-  - component: {fileID: 8193985710990238051}
+  - component: {fileID: 1914561012833363610}
+  - component: {fileID: 471791389259466558}
+  - component: {fileID: 4754314225917838154}
+  - component: {fileID: 4404196905767528106}
+  - component: {fileID: 5618192606757826447}
+  - component: {fileID: 440718512516434425}
   m_Layer: 0
-  m_Name: EnemyCube
+  m_Name: FinalBoss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3796721643916488581
+--- !u!4 &1914561012833363610
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841948721747984643}
+  m_GameObject: {fileID: 3208984384025211943}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1, y: 1.46, z: 91.37}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 7.94, y: 1.68392, z: 9.31}
+  m_LocalScale: {x: 6, y: 6, z: 6}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5084575182733460984
+--- !u!33 &471791389259466558
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841948721747984643}
+  m_GameObject: {fileID: 3208984384025211943}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &3587361991470534338
+--- !u!23 &4754314225917838154
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841948721747984643}
+  m_GameObject: {fileID: 3208984384025211943}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -93,13 +93,13 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4094206035414532053
+--- !u!65 &4404196905767528106
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841948721747984643}
+  m_GameObject: {fileID: 3208984384025211943}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -114,13 +114,13 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &967881663835432079
+--- !u!54 &5618192606757826447
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841948721747984643}
+  m_GameObject: {fileID: 3208984384025211943}
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
@@ -141,17 +141,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8193985710990238051
+--- !u!114 &440718512516434425
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841948721747984643}
+  m_GameObject: {fileID: 3208984384025211943}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82f71ca95a5467746935f24af4e2b708, type: 3}
+  m_Script: {fileID: 11500000, guid: b520a00b7eb06934092f84bdd6f692ba, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  health: 5
+  m_EditorClassIdentifier: Assembly-CSharp::Boss
+  health: 40
   healthText: {fileID: 0}
