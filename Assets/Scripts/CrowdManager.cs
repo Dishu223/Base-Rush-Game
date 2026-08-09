@@ -221,8 +221,12 @@ public class CrowdManager : MonoBehaviour
         }
     }
 
+    public int maxUnits = 150;
+
     public void AddUnit()
     {
+        if (units.Count >= maxUnits) return;
+        
         GameObject newUnit = Instantiate(unitPrefab, transform.position, Quaternion.identity, transform);
         units.Add(newUnit.transform);
         FormatCrowd();
@@ -232,6 +236,8 @@ public class CrowdManager : MonoBehaviour
     {
         for (int i = 0; i < amount; i++)
         {
+            if (units.Count >= maxUnits) break;
+            
             GameObject newUnit = Instantiate(unitPrefab, transform.position, Quaternion.identity, transform);
             units.Add(newUnit.transform);
         }

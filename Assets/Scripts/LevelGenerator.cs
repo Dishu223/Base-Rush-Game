@@ -67,6 +67,7 @@ public class LevelGenerator : MonoBehaviour
             if (bossScript != null)
             {
                 bossScript.health += (level - 1) * 20; // +20 Health per level!
+                bossScript.UpdateHealthText(); // Update the 3D Text UI!
                 
                 // Scale up boss slightly per level (max 2x)
                 float scaleMod = Mathf.Min(1f + ((level - 1) * 0.1f), 2f);

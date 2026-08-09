@@ -12,7 +12,7 @@ public class Boss : MonoBehaviour
         UpdateHealthText();
     }
 
-    void UpdateHealthText()
+    public void UpdateHealthText()
     {
         if (healthText != null)
         {
