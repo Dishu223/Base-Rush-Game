@@ -88,15 +88,18 @@ public class CrowdManager : MonoBehaviour
                     // Use SmoothStep for a nice easing effect
                     units[i].position = Vector3.Lerp(startPositions[i], targetPositions[i], Mathf.SmoothStep(0, 1, t));
                     
-                    // Fade color to a fiery orange/yellow!
+                    // Fade color MUCH slower! (Only gets halfway there during rise)
                     if (renderers[i] != null)
                     {
-                        renderers[i].material.color = Color.Lerp(originalColors[i], new Color(1f, 0.5f, 0f), t);
+                        renderers[i].material.color = Color.Lerp(originalColors[i], new Color(1f, 0.5f, 0f), t * 0.5f);
                     }
                 }
             }
             yield return null;
         }
+
+        // Start hovering animation for units suspended in air!
+        Coroutine hoverCoroutine = StartCoroutine(ApplyHoverAndFade());
 
         // Suspend in the air for a dramatic pause (2 seconds!)
         yield return new WaitForSeconds(2.0f);
@@ -128,10 +131,38 @@ public class CrowdManager : MonoBehaviour
             waitTime = Mathf.Max(0.05f, waitTime * 0.95f);
         }
 
+        // Stop the hovering effect so the remaining units FREEZE beautifully in slow-mo!
+        if (hoverCoroutine != null) StopCoroutine(hoverCoroutine);
+
         // If boss is dead and we have units left, we won! Let's update UI just in case.
         if (bossTarget == null && UIManager.instance != null)
         {
             UIManager.instance.UpdateUnitCount(units.Count);
+        }
+    }
+
+    private System.Collections.IEnumerator ApplyHoverAndFade()
+    {
+        while (bossTarget != null)
+        {
+            // Derivative of Sine wave gives us a velocity to gently bob up and down
+            float bobVelocity = Mathf.Cos(Time.time * 3f) * 0.8f; 
+            
+            for (int i = 0; i < units.Count; i++)
+            {
+                if (units[i] != null)
+                {
+                    units[i].position += new Vector3(0, bobVelocity * Time.deltaTime, 0);
+                    
+                    Renderer r = units[i].GetComponentInChildren<Renderer>();
+                    if (r != null)
+                    {
+                        // Slowly continue fading to bright fiery orange while hovering!
+                        r.material.color = Color.Lerp(r.material.color, new Color(1f, 0.5f, 0f), Time.deltaTime * 0.8f);
+                    }
+                }
+            }
+            yield return null;
         }
     }
 

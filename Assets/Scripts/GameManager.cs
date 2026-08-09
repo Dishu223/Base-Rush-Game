@@ -48,11 +48,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0.2f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
 
-        // Wait in REAL-TIME because game time is slowed down
-        yield return new WaitForSecondsRealtime(2.5f); 
+        // Wait in REAL-TIME because game time is slowed down (Extended to 5 seconds!)
+        yield return new WaitForSecondsRealtime(5.0f); 
         
-        // Restore normal time
-        Time.timeScale = 1f;
+        // Stop the background completely!
+        Time.timeScale = 0f;
         Time.fixedDeltaTime = 0.02f;
 
         if (UIManager.instance != null) UIManager.instance.ShowWinScreen();
