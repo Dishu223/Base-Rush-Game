@@ -10,7 +10,7 @@ public class FinishLine : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            hasCrossed = true;
+            hasFinished = true;
             
             if (GameManager.instance != null)
             {
