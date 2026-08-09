@@ -9,6 +9,8 @@ public class CrowdManager : MonoBehaviour
 
     [Header("Current Crowd")]
     public List<Transform> units = new List<Transform>();
+    
+    private Transform bossTarget;
 
     void Start()
     {
@@ -20,8 +22,52 @@ public class CrowdManager : MonoBehaviour
 
     void Update()
     {
+        if (bossTarget != null)
+        {
+            SwarmBoss();
+            return; // Skip normal formatting
+        }
+
         // Call this every frame so the units lerp smoothly to their positions
         FormatCrowd();
+    }
+
+    public void ChargeBoss(Transform boss)
+    {
+        bossTarget = boss;
+    }
+
+    private void SwarmBoss()
+    {
+        for (int i = units.Count - 1; i >= 0; i--)
+        {
+            if (units[i] == null) continue;
+
+            // Move unit extremely fast towards the boss
+            units[i].position = Vector3.MoveTowards(units[i].position, bossTarget.position, 25f * Time.deltaTime);
+
+            // If it hits the boss (distance check)
+            if (Vector3.Distance(units[i].position, bossTarget.position) < 1.5f)
+            {
+                Boss bossScript = bossTarget.GetComponent<Boss>();
+                if (bossScript != null) bossScript.TakeDamage(1);
+
+                Transform unitToRemove = units[i];
+                units.RemoveAt(i);
+                Destroy(unitToRemove.gameObject);
+
+                if (units.Count == 0 && bossScript != null && bossScript.health > 0)
+                {
+                    if (GameManager.instance != null) GameManager.instance.GameOver();
+                }
+            }
+        }
+        
+        // Update UI!
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.UpdateUnitCount(units.Count);
+        }
     }
 
     public void AddUnits(int amount)

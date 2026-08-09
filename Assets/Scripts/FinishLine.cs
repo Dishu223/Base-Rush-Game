@@ -10,20 +10,20 @@ public class FinishLine : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            hasFinished = true;
+            hasCrossed = true;
             
-            // 1. Stop the player from moving forward
-            PlayerController controller = other.GetComponent<PlayerController>();
-            if (controller != null)
+            if (GameManager.instance != null)
             {
-                controller.enabled = false;
+                GameManager.instance.StartBossPhase();
             }
 
-            // 2. Tell the GameManager to calculate win/loss
+            // Find the boss and tell the crowd to attack it!
             CrowdManager crowd = other.GetComponent<CrowdManager>();
-            if (crowd != null && GameManager.instance != null)
+            Boss boss = FindObjectOfType<Boss>();
+            
+            if (crowd != null && boss != null)
             {
-                GameManager.instance.FinishLineReached(crowd);
+                crowd.ChargeBoss(boss.transform);
             }
         }
     }

@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     [Header("Game Settings")]
     public int enemyBaseArmySize = 25; // How many units you need to win
     public bool isGameOver = false;
+    public bool isBossPhase = false;
 
     [Header("Economy")]
     public int coins = 0;
@@ -26,25 +27,25 @@ public class GameManager : MonoBehaviour
     {
         coins += amount;
         PlayerPrefs.SetInt("TotalCoins", coins); // Save automatically
-        
-        // Update UI if we have a coin text (we will add this to UIManager next!)
-        // if (UIManager.instance != null) UIManager.instance.UpdateCoinText(coins);
+    }
+
+    public void StartBossPhase()
+    {
+        isBossPhase = true;
+        // We no longer instantly win/lose at the finish line! 
+        // The player controller will stop, and the crowd will swarm the boss.
+    }
+
+    public void BossDefeated()
+    {
+        isGameOver = true;
+        if (UIManager.instance != null) UIManager.instance.ShowWinScreen();
     }
 
     public void FinishLineReached(CrowdManager playerCrowd)
     {
-        isGameOver = true;
-        // Calculate remaining army
-        int remaining = playerCrowd.units.Count;
-
-        if (remaining >= enemyBaseArmySize)
-        {
-            if (UIManager.instance != null) UIManager.instance.ShowWinScreen();
-        }
-        else
-        {
-            if (UIManager.instance != null) UIManager.instance.ShowLoseScreen();
-        }
+        // This is the old instant win logic. We will replace this call in FinishLine.cs
+        // to call StartBossPhase() instead.
     }
 
     public void GameOver()

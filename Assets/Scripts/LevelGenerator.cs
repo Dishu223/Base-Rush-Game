@@ -6,6 +6,7 @@ public class LevelGenerator : MonoBehaviour
     [Header("Prefabs")]
     public GameObject groundSegmentPrefab; // A flat stretch of runway
     public GameObject finishLinePrefab;
+    public GameObject bossPrefab; // The final boss
     public GameObject[] gatePrefabs; // Array of different gate prefabs
     public GameObject[] obstaclePrefabs; // Enemies, walls, sawblades
     public GameObject coinPrefab;
@@ -40,6 +41,12 @@ public class LevelGenerator : MonoBehaviour
         // 3. Spawn Finish Line at the end (Raised to Y=1 so it's not underground)
         Vector3 finishPos = new Vector3(0, 1f, currentZ);
         Instantiate(finishLinePrefab, finishPos, Quaternion.identity, transform);
+
+        // 4. Spawn the Boss behind the finish line!
+        if (bossPrefab != null)
+        {
+            Instantiate(bossPrefab, new Vector3(0, 1f, currentZ + 20f), Quaternion.identity, transform);
+        }
     }
 
     void SpawnObstaclesOnSegment(float startZ, float endZ)
@@ -93,7 +100,8 @@ public class LevelGenerator : MonoBehaviour
         for (int i = 0; i < numCoins; i++)
         {
             // Raised to Y=0.5 so coins aren't underground
-            Instantiate(coinPrefab, new Vector3(randomX, 0.5f, zPos + (i * 2f)), Quaternion.identity, transform);
+            // We use coinPrefab.transform.rotation so it keeps its 90-degree X rotation!
+            Instantiate(coinPrefab, new Vector3(randomX, 0.5f, zPos + (i * 2f)), coinPrefab.transform.rotation, transform);
         }
     }
 

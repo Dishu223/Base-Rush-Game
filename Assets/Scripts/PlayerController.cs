@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     {
         // Don't move if the game is over!
         if (GameManager.instance != null && GameManager.instance.isGameOver) return;
+        
+        // Stop forward movement when fighting the boss!
+        if (GameManager.instance != null && GameManager.instance.isBossPhase) return;
 
         // For hypercasual, wait for the first tap to start running
         if (!isMoving && Input.GetMouseButtonDown(0))
