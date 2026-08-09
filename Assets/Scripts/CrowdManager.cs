@@ -42,12 +42,26 @@ public class CrowdManager : MonoBehaviour
         Vector3[] startPositions = new Vector3[units.Count];
         Vector3[] targetPositions = new Vector3[units.Count];
 
+        // Calculate center of the crowd for a single performance-friendly smoke puff
+        Vector3 centerGround = Vector3.zero;
+        int activeCount = 0;
+        
         for (int i = 0; i < units.Count; i++)
         {
             if (units[i] == null) continue;
             startPositions[i] = units[i].position;
             // Rise up between 3 and 7 units high, slightly randomized
             targetPositions[i] = units[i].position + new Vector3(0, Random.Range(3f, 7f), 0);
+            
+            centerGround += startPositions[i];
+            activeCount++;
+        }
+
+        if (activeCount > 0)
+        {
+            centerGround /= activeCount;
+            centerGround.y = 0.5f; // Ground level
+            if (VFXManager.instance != null) VFXManager.instance.SpawnSmoke(centerGround);
         }
 
         while (elapsed < riseDuration)
@@ -104,6 +118,15 @@ public class CrowdManager : MonoBehaviour
 
     private System.Collections.IEnumerator ShootUnitAtBoss(Transform unit, Boss bossScript)
     {
+        // Add a gorgeous dynamic trail for the cinematic flight!
+        TrailRenderer trail = unit.gameObject.AddComponent<TrailRenderer>();
+        trail.time = 0.2f; // Short trail
+        trail.startWidth = 0.4f;
+        trail.endWidth = 0f;
+        trail.material = new Material(Shader.Find("Sprites/Default"));
+        trail.startColor = Color.yellow;
+        trail.endColor = new Color(1f, 0f, 0f, 0f); // Fades out to clear red
+        
         Vector3 startPos = unit.position;
         
         // Generate a random control point to make the unit swerve in an arc!

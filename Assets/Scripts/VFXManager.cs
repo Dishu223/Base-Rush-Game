@@ -11,11 +11,20 @@ public class VFXManager : MonoBehaviour
     [Header("Special FX")]
     public GameObject lightningPrefab;
     public GameObject fireworksPrefab;
+    public GameObject smokePrefab;
 
     void Awake()
     {
         if (instance == null) instance = this;
         else Destroy(gameObject);
+    }
+
+    public void SpawnSmoke(Vector3 position)
+    {
+        if (smokePrefab != null)
+        {
+            Instantiate(smokePrefab, position, Quaternion.identity);
+        }
     }
 
     public void SpawnLightning(Vector3 position)

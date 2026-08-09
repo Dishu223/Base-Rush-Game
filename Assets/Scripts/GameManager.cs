@@ -39,6 +39,12 @@ public class GameManager : MonoBehaviour
     public void BossDefeated()
     {
         isGameOver = true;
+        StartCoroutine(WinSequence());
+    }
+
+    private System.Collections.IEnumerator WinSequence()
+    {
+        yield return new WaitForSeconds(2.5f); // 2.5 second cinematic delay before UI pops up
         if (UIManager.instance != null) UIManager.instance.ShowWinScreen();
     }
 

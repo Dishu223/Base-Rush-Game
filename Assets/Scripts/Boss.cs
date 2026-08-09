@@ -30,8 +30,8 @@ public class Boss : MonoBehaviour
             // Spawn fireworks closer to the camera so they aren't hidden inside the giant boss!
             VFXManager.instance.SpawnFireworks(transform.position - new Vector3(0, 0, 2.5f));
             
-            // Spawn Lightning randomly on the FRONT face of the boss so it is clearly visible!
-            Vector3 lightningPos = transform.position + new Vector3(Random.Range(-1.5f, 1.5f), Random.Range(-1.5f, 1.5f), -2.5f);
+            // Spawn Lightning randomly on the ENTIRE FRONT face of the boss (Since scale is 4, radius is 2)
+            Vector3 lightningPos = transform.position + new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), -2.5f);
             VFXManager.instance.SpawnLightning(lightningPos);
         }
         
