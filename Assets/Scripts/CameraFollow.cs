@@ -31,14 +31,14 @@ public class CameraFollow : MonoBehaviour
             Boss boss = FindObjectOfType<Boss>();
             if (boss != null)
             {
-                // Move camera up and to the side for a wide cinematic shot
+                // Move camera up and to the side for a wide cinematic shot, slower transition!
                 Vector3 desiredPosition = target.position + new Vector3(12, 10, -8);
-                transform.position = Vector3.Lerp(transform.position, desiredPosition, 2f * Time.deltaTime);
+                transform.position = Vector3.Lerp(transform.position, desiredPosition, 0.8f * Time.deltaTime);
                 
                 // Smoothly look directly at the Boss
                 Vector3 direction = boss.transform.position - transform.position;
                 Quaternion targetRot = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, 3f * Time.deltaTime);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, 1.5f * Time.deltaTime);
             }
             return;
         }

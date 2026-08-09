@@ -22,11 +22,7 @@ public class CrowdManager : MonoBehaviour
 
     void Update()
     {
-        if (bossTarget != null)
-        {
-            SwarmBoss();
-            return; // Skip normal formatting
-        }
+        if (bossTarget != null) return; // Skip normal formatting during boss fight
 
         // Call this every frame so the units lerp smoothly to their positions
         FormatCrowd();
@@ -35,38 +31,83 @@ public class CrowdManager : MonoBehaviour
     public void ChargeBoss(Transform boss)
     {
         bossTarget = boss;
+        StartCoroutine(BossFightSequence());
     }
 
-    private void SwarmBoss()
+    private System.Collections.IEnumerator BossFightSequence()
     {
-        for (int i = units.Count - 1; i >= 0; i--)
+        // Phase 1: Rise up into the air slowly!
+        float riseDuration = 1.5f;
+        float elapsed = 0f;
+        Vector3[] startPositions = new Vector3[units.Count];
+        Vector3[] targetPositions = new Vector3[units.Count];
+
+        for (int i = 0; i < units.Count; i++)
         {
             if (units[i] == null) continue;
+            startPositions[i] = units[i].position;
+            // Rise up between 3 and 7 units high, slightly randomized
+            targetPositions[i] = units[i].position + new Vector3(0, Random.Range(3f, 7f), 0);
+        }
 
-            // Move unit extremely fast towards the boss
-            units[i].position = Vector3.MoveTowards(units[i].position, bossTarget.position, 25f * Time.deltaTime);
-
-            // If it hits the boss (distance check)
-            if (Vector3.Distance(units[i].position, bossTarget.position) < 1.5f)
+        while (elapsed < riseDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / riseDuration;
+            for (int i = 0; i < units.Count; i++)
             {
-                Boss bossScript = bossTarget.GetComponent<Boss>();
-                if (bossScript != null) bossScript.TakeDamage(1);
+                if (units[i] != null)
+                {
+                    // Use SmoothStep for a nice easing effect
+                    units[i].position = Vector3.Lerp(startPositions[i], targetPositions[i], Mathf.SmoothStep(0, 1, t));
+                }
+            }
+            yield return null;
+        }
 
-                Transform unitToRemove = units[i];
-                units.RemoveAt(i);
-                Destroy(unitToRemove.gameObject);
+        // Suspend in the air for a dramatic pause
+        yield return new WaitForSeconds(0.5f);
+
+        // Phase 2: Shoot at the boss 1 by 1!
+        Boss bossScript = bossTarget.GetComponent<Boss>();
+        
+        while (units.Count > 0)
+        {
+            Transform attacker = units[units.Count - 1];
+            units.RemoveAt(units.Count - 1);
+            
+            if (attacker != null)
+            {
+                StartCoroutine(ShootUnitAtBoss(attacker, bossScript));
+            }
+
+            // Update UI
+            if (UIManager.instance != null) UIManager.instance.UpdateUnitCount(units.Count);
+
+            // Wait a tiny fraction of a second before launching the next one (machine gun effect)
+            yield return new WaitForSeconds(0.08f);
+        }
+    }
+
+    private System.Collections.IEnumerator ShootUnitAtBoss(Transform unit, Boss bossScript)
+    {
+        while (unit != null && bossTarget != null)
+        {
+            // Move incredibly fast towards the boss
+            unit.position = Vector3.MoveTowards(unit.position, bossTarget.position, 40f * Time.deltaTime);
+            
+            if (Vector3.Distance(unit.position, bossTarget.position) < 1.5f)
+            {
+                if (bossScript != null) bossScript.TakeDamage(1);
+                Destroy(unit.gameObject);
 
                 if (units.Count == 0 && bossScript != null && bossScript.health > 0)
                 {
                     if (GameManager.instance != null) GameManager.instance.GameOver();
                 }
+                yield break;
             }
-        }
-        
-        // Update UI!
-        if (UIManager.instance != null)
-        {
-            UIManager.instance.UpdateUnitCount(units.Count);
+            yield return null;
         }
     }
 
