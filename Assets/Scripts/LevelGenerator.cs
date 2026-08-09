@@ -30,32 +30,30 @@ public class LevelGenerator : MonoBehaviour
             Vector3 segmentPos = new Vector3(0, 0, currentZ);
             Instantiate(groundSegmentPrefab, segmentPos, Quaternion.identity, transform);
 
-            // 2. Skip spawning obstacles on the very first segment so player has time to react
-            if (i > 0)
-            {
-                SpawnObstaclesOnSegment(currentZ, currentZ + segmentLength);
-            }
+            // 2. Spawn obstacles. Start at Z=15 on the first segment so player has a small buffer.
+            float startSpawnZ = (i == 0) ? 15f : currentZ;
+            SpawnObstaclesOnSegment(startSpawnZ, currentZ + segmentLength);
 
             currentZ += segmentLength;
         }
 
-        // 3. Spawn Finish Line at the end
-        Vector3 finishPos = new Vector3(0, 0, currentZ);
+        // 3. Spawn Finish Line at the end (Raised to Y=1 so it's not underground)
+        Vector3 finishPos = new Vector3(0, 1f, currentZ);
         Instantiate(finishLinePrefab, finishPos, Quaternion.identity, transform);
     }
 
     void SpawnObstaclesOnSegment(float startZ, float endZ)
     {
-        // We divide the segment into "rows" to ensure things don't overlap too badly
-        int rows = 3; 
-        float distancePerRow = segmentLength / rows;
+        // Increase rows from 3 to 6 for WAY more activity!
+        int rows = 6; 
+        float distancePerRow = (endZ - startZ) / rows;
 
         for (int r = 0; r < rows; r++)
         {
-            float rowZ = startZ + (r * distancePerRow) + (distancePerRow / 2f); // Center of the row
+            float rowZ = startZ + (r * distancePerRow); 
             
-            // Randomly decide what to spawn in this row (0 = Nothing, 1 = Gate, 2 = Coins, 3 = Obstacle)
-            int spawnType = Random.Range(0, 4);
+            // Randomly decide what to spawn. Removed 0 (Nothing) so it ALWAYS spawns something!
+            int spawnType = Random.Range(1, 4);
 
             switch (spawnType)
             {
@@ -94,7 +92,8 @@ public class LevelGenerator : MonoBehaviour
         
         for (int i = 0; i < numCoins; i++)
         {
-            Instantiate(coinPrefab, new Vector3(randomX, 0, zPos + (i * 2f)), Quaternion.identity, transform);
+            // Raised to Y=0.5 so coins aren't underground
+            Instantiate(coinPrefab, new Vector3(randomX, 0.5f, zPos + (i * 2f)), Quaternion.identity, transform);
         }
     }
 
@@ -105,6 +104,7 @@ public class LevelGenerator : MonoBehaviour
         GameObject obstacle = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
         float randomX = Random.Range(-runwayWidth, runwayWidth);
         
-        Instantiate(obstacle, new Vector3(randomX, 0, zPos), Quaternion.identity, transform);
+        // Raised to Y=1f so enemies and sawblades sit on the ground
+        Instantiate(obstacle, new Vector3(randomX, 1f, zPos), Quaternion.identity, transform);
     }
 }
