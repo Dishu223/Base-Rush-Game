@@ -149,8 +149,8 @@ public class CrowdManager : MonoBehaviour
             {
                 if (units[i] != null)
                 {
-                    // Use the unit's unique ID to create a random time offset so they all hover independently!
-                    float uniqueOffset = units[i].GetInstanceID() * 0.1f;
+                    // Use the unit's unique hash code to create a random time offset so they all hover independently!
+                    float uniqueOffset = units[i].GetHashCode() * 0.1f;
                     float bobVelocity = Mathf.Cos((Time.time + uniqueOffset) * 3f) * 0.8f; 
                     
                     units[i].position += new Vector3(0, bobVelocity * Time.deltaTime, 0);
