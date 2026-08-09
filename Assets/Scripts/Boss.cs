@@ -27,7 +27,7 @@ public class Boss : MonoBehaviour
         
         if (VFXManager.instance != null) 
         {
-            VFXManager.instance.SpawnHitParticle(transform.position);
+            VFXManager.instance.SpawnFireworks(transform.position);
         }
 
         if (health <= 0)
@@ -40,10 +40,11 @@ public class Boss : MonoBehaviour
     {
         if (VFXManager.instance != null) 
         {
-            // Spawn a few extra particles for a big explosion
-            VFXManager.instance.SpawnHitParticle(transform.position);
-            VFXManager.instance.SpawnHitParticle(transform.position + Vector3.up);
-            VFXManager.instance.SpawnHitParticle(transform.position + Vector3.right);
+            // Spawn a massive fireworks explosion!
+            VFXManager.instance.SpawnFireworks(transform.position);
+            VFXManager.instance.SpawnFireworks(transform.position + Vector3.up * 2);
+            VFXManager.instance.SpawnFireworks(transform.position + Vector3.right * 2);
+            VFXManager.instance.SpawnFireworks(transform.position + Vector3.left * 2);
         }
         
         if (GameManager.instance != null)

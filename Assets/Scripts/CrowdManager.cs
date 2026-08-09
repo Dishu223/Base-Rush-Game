@@ -48,6 +48,12 @@ public class CrowdManager : MonoBehaviour
             startPositions[i] = units[i].position;
             // Rise up between 3 and 7 units high, slightly randomized
             targetPositions[i] = units[i].position + new Vector3(0, Random.Range(3f, 7f), 0);
+            
+            // Spawn some cool lightning particles while they rise!
+            if (VFXManager.instance != null)
+            {
+                VFXManager.instance.SpawnLightning(targetPositions[i]);
+            }
         }
 
         while (elapsed < riseDuration)
@@ -65,14 +71,18 @@ public class CrowdManager : MonoBehaviour
             yield return null;
         }
 
-        // Suspend in the air for a dramatic pause
-        yield return new WaitForSeconds(0.5f);
+        // Suspend in the air for a dramatic pause (2 seconds!)
+        yield return new WaitForSeconds(2.0f);
 
-        // Phase 2: Shoot at the boss 1 by 1!
+        // Phase 2: Shoot at the boss 1 by 1 with exponential speed!
         Boss bossScript = bossTarget.GetComponent<Boss>();
+        float waitTime = 0.2f; // Starts slow!
         
         while (units.Count > 0)
         {
+            // If the boss is destroyed, stop firing!
+            if (bossTarget == null) break;
+
             Transform attacker = units[units.Count - 1];
             units.RemoveAt(units.Count - 1);
             
@@ -84,8 +94,17 @@ public class CrowdManager : MonoBehaviour
             // Update UI
             if (UIManager.instance != null) UIManager.instance.UpdateUnitCount(units.Count);
 
-            // Wait a tiny fraction of a second before launching the next one (machine gun effect)
-            yield return new WaitForSeconds(0.08f);
+            // Wait before launching the next one
+            yield return new WaitForSeconds(waitTime);
+
+            // Exponentially speed up the attack! Clamped at 0.015f so it doesn't freeze.
+            waitTime = Mathf.Max(0.015f, waitTime * 0.85f);
+        }
+
+        // If boss is dead and we have units left, we won! Let's update UI just in case.
+        if (bossTarget == null && UIManager.instance != null)
+        {
+            UIManager.instance.UpdateUnitCount(units.Count);
         }
     }
 

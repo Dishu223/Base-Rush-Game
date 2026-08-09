@@ -8,10 +8,30 @@ public class VFXManager : MonoBehaviour
     public GameObject hitParticlePrefab;
     public GameObject floatingTextPrefab;
 
+    [Header("Special FX")]
+    public GameObject lightningPrefab;
+    public GameObject fireworksPrefab;
+
     void Awake()
     {
         if (instance == null) instance = this;
         else Destroy(gameObject);
+    }
+
+    public void SpawnLightning(Vector3 position)
+    {
+        if (lightningPrefab != null)
+        {
+            Instantiate(lightningPrefab, position, Quaternion.identity);
+        }
+    }
+
+    public void SpawnFireworks(Vector3 position)
+    {
+        if (fireworksPrefab != null)
+        {
+            Instantiate(fireworksPrefab, position, Quaternion.identity);
+        }
     }
 
     public void SpawnHitParticle(Vector3 position)
