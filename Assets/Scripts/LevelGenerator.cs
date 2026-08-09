@@ -45,7 +45,12 @@ public class LevelGenerator : MonoBehaviour
 
             // 2. Spawn obstacles. Start at Z=15 on the first segment so player has a small buffer.
             float startSpawnZ = (i == 0) ? 15f : currentZ;
-            SpawnObstaclesOnSegment(startSpawnZ, currentZ + segmentLength);
+            
+            // Ensure we stop spawning obstacles well before the Finish Line!
+            float endSpawnZ = currentZ + segmentLength;
+            if (i == totalSegments - 1) endSpawnZ -= 15f; 
+            
+            SpawnObstaclesOnSegment(startSpawnZ, endSpawnZ);
 
             currentZ += segmentLength;
         }

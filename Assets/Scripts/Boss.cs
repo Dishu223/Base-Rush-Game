@@ -34,8 +34,9 @@ public class Boss : MonoBehaviour
             Vector3 lightningPos = transform.position + new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), -2.5f);
             VFXManager.instance.SpawnLightning(lightningPos);
             
-            // Explode tiny white damage text out of the boss!
-            VFXManager.instance.SpawnFloatingText(lightningPos, "-" + damage.ToString(), Color.white, 0.6f);
+            // Explode tiny white damage text out of the boss! Pull it closer to camera so it doesn't clip, and make it smaller!
+            Vector3 textPos = transform.position - new Vector3(0, 0, 3f);
+            VFXManager.instance.SpawnFloatingText(textPos, "-" + damage.ToString(), Color.white, 0.4f);
         }
         
         // Subtle screen shake on every hit so it doesn't hurt the eyes!

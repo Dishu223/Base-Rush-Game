@@ -34,6 +34,8 @@ public class CrowdManager : MonoBehaviour
         StartCoroutine(BossFightSequence());
     }
 
+    private int activeAttackers = 0;
+
     private System.Collections.IEnumerator BossFightSequence()
     {
         // Phase 1: Rise up into the air slowly!
@@ -107,6 +109,7 @@ public class CrowdManager : MonoBehaviour
         // Phase 2: Shoot at the boss 1 by 1 with multiplied speed!
         Boss bossScript = bossTarget.GetComponent<Boss>();
         float waitTime = 0.2f; // Starts slow!
+        activeAttackers = 0; // Reset just in case
         
         while (units.Count > 0)
         {
@@ -118,6 +121,7 @@ public class CrowdManager : MonoBehaviour
             
             if (attacker != null)
             {
+                activeAttackers++; // Track how many units are currently flying through the air
                 StartCoroutine(ShootUnitAtBoss(attacker, bossScript));
             }
 
@@ -206,8 +210,11 @@ public class CrowdManager : MonoBehaviour
         {
             if (bossScript != null) bossScript.TakeDamage(1);
             Destroy(unit.gameObject);
+            
+            activeAttackers--; // This unit is no longer flying!
 
-            if (units.Count == 0 && bossScript != null && bossScript.health > 0)
+            // Only trigger Game Over if the pool is empty AND all flying units have hit, but the boss is still alive!
+            if (units.Count == 0 && activeAttackers == 0 && bossScript != null && bossScript.health > 0)
             {
                 if (GameManager.instance != null) GameManager.instance.GameOver();
             }

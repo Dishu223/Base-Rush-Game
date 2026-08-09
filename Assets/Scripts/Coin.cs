@@ -34,15 +34,18 @@ public class Coin : MonoBehaviour
         // Either the player leader or the follower units can pick up coins
         if (other.CompareTag("Player") || other.CompareTag("Unit"))
         {
+            int multiplier = 1;
             if (GameManager.instance != null)
             {
+                multiplier = GameManager.instance.incomeMultiplierUpgrade;
                 GameManager.instance.AddCoins(coinValue);
             }
 
-            // Spawn floating text for the coin pickup (we made it smaller by passing 0.3f scale!)
+            // Spawn floating text for the coin pickup matching the actual upgraded value!
             if (VFXManager.instance != null)
             {
-                VFXManager.instance.SpawnFloatingText(transform.position, "+1", Color.yellow, 0.3f);
+                int totalEarned = coinValue * multiplier;
+                VFXManager.instance.SpawnFloatingText(transform.position, "+" + totalEarned, Color.yellow, 0.3f);
             }
 
             // Optional: Play a sound effect here!
