@@ -39,6 +39,7 @@ public class CrowdManager : MonoBehaviour
         // Phase 1: Rise up into the air slowly!
         float riseDuration = 1.5f;
         float elapsed = 0f;
+        
         Vector3[] startPositions = new Vector3[units.Count];
         Vector3[] targetPositions = new Vector3[units.Count];
 
@@ -46,9 +47,21 @@ public class CrowdManager : MonoBehaviour
         Vector3 centerGround = Vector3.zero;
         int activeCount = 0;
         
+        Renderer[] renderers = new Renderer[units.Count];
+        Color[] originalColors = new Color[units.Count];
+        
         for (int i = 0; i < units.Count; i++)
         {
             if (units[i] == null) continue;
+            
+            // Disable physics so they don't fall back to the ground!
+            Rigidbody rb = units[i].GetComponent<Rigidbody>();
+            if (rb != null) rb.isKinematic = true;
+            
+            // Store renderer and original color for fading
+            renderers[i] = units[i].GetComponentInChildren<Renderer>();
+            if (renderers[i] != null) originalColors[i] = renderers[i].material.color;
+
             startPositions[i] = units[i].position;
             // Rise up between 3 and 7 units high, slightly randomized
             targetPositions[i] = units[i].position + new Vector3(0, Random.Range(3f, 7f), 0);
@@ -74,6 +87,12 @@ public class CrowdManager : MonoBehaviour
                 {
                     // Use SmoothStep for a nice easing effect
                     units[i].position = Vector3.Lerp(startPositions[i], targetPositions[i], Mathf.SmoothStep(0, 1, t));
+                    
+                    // Fade color to a fiery orange/yellow!
+                    if (renderers[i] != null)
+                    {
+                        renderers[i].material.color = Color.Lerp(originalColors[i], new Color(1f, 0.5f, 0f), t);
+                    }
                 }
             }
             yield return null;

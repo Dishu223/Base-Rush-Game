@@ -44,7 +44,17 @@ public class GameManager : MonoBehaviour
 
     private System.Collections.IEnumerator WinSequence()
     {
-        yield return new WaitForSeconds(2.5f); // 2.5 second cinematic delay before UI pops up
+        // Trigger Epic Slow Motion!
+        Time.timeScale = 0.2f;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+
+        // Wait in REAL-TIME because game time is slowed down
+        yield return new WaitForSecondsRealtime(2.5f); 
+        
+        // Restore normal time
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f;
+
         if (UIManager.instance != null) UIManager.instance.ShowWinScreen();
     }
 
